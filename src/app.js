@@ -1,11 +1,11 @@
 // src/app.js
 const express = require('express');
-const routes = require('./routes'); // src/routes/index.js
+const routes = require('./routes/index');
 
 const app = express();
 
 // Routes
-app.use('/api', routes);
+app.use(routes);
 
 // 404
 app.use((req, res, next) => {

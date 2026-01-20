@@ -3,6 +3,8 @@
 ## architecture du projet
 ```
 project-root/
+├── doc/
+│   └── dev/
 ├── src/
 │   ├── config/
 │   ├── loaders/
@@ -31,3 +33,6 @@ project-root/
 `src/utils` : fonctions génériques réutilisables (hash de mot de passe, formatage, helpers).
 
 ​`tests/` : tests unitaires/intégration (ex. Jest, Mocha).
+
+# documentation
+pour traivailler sur le projet liser se qu'il y a dans `/./doc/dev/`
