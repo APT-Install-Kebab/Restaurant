@@ -1,6 +1,7 @@
 # API de restaurant
 
 ## architecture du projet
+
 ```
 project-root/
 ├── doc/
@@ -35,4 +36,5 @@ project-root/
 ​`tests/` : tests unitaires/intégration (ex. Jest, Mocha).
 
 # documentation
+
 pour traivailler sur le projet liser se qu'il y a dans `/./doc/dev/`
