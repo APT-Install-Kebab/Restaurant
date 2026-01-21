@@ -1,4 +1,4 @@
-name: Discord Code Quality
+name: Discord Code Quality (Embed)
 
 on:
   workflow_run:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send Discord notification
+      - name: Send Discord embed
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
@@ -22,11 +22,30 @@ jobs:
           URL="${{ github.event.workflow_run.html_url }}"
 
           if [ "$CONCLUSION" = "success" ]; then
-            MSG="✅ **Code quality OK**\n📦 ${REPO}\n🌿 ${BRANCH}\n👤 ${ACTOR}\n🔗 ${URL}"
+            COLOR=3066993
+            TITLE="✅ Code Quality OK"
+            DETAILS="Lint et Format sont passés avec succès."
           else
-            MSG="❌ **Code quality FAILED**\n📦 ${REPO}\n🌿 ${BRANCH}\n👤 ${ACTOR}\n🔍 Lint ou format en erreur\n🔗 ${URL}"
+            COLOR=15158332
+            TITLE="❌ Code Quality FAILED"
+            DETAILS="Lint ou Format est en erreur."
           fi
 
           curl -X POST -H "Content-Type: application/json" \
-            -d "{\"content\":\"$MSG\"}" \
-            $DISCORD_WEBHOOK
+          -d "{
+            \"embeds\": [{
+              \"title\": \"$TITLE\",
+              \"color\": $COLOR,
+              \"fields\": [
+                { \"name\": \"📦 Repo\", \"value\": \"$REPO\", \"inline\": true },
+                { \"name\": \"🌿 Branche\", \"value\": \"$BRANCH\", \"inline\": true },
+                { \"name\": \"👤 Auteur\", \"value\": \"$ACTOR\", \"inline\": true },
+                { \"name\": \"🔍 Détails\", \"value\": \"$DETAILS\" }
+              ],
+              \"url\": \"$URL\",
+              \"footer\": {
+                \"text\": \"GitHub Actions • Code Quality\"
+              }
+            }]
+          }" \
+          $DISCORD_WEBHOOK
