@@ -1,0 +1,32 @@
+name: Discord Code Quality
+
+on:
+  workflow_run:
+    workflows: ["Code Quality"]
+    types:
+      - completed
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          CONCLUSION="${{ github.event.workflow_run.conclusion }}"
+          REPO="${{ github.repository }}"
+          BRANCH="${{ github.event.workflow_run.head_branch }}"
+          ACTOR="${{ github.event.workflow_run.actor.login }}"
+          URL="${{ github.event.workflow_run.html_url }}"
+
+          if [ "$CONCLUSION" = "success" ]; then
+            MSG="✅ **Code quality OK**\n📦 ${REPO}\n🌿 ${BRANCH}\n👤 ${ACTOR}\n🔗 ${URL}"
+          else
+            MSG="❌ **Code quality FAILED**\n📦 ${REPO}\n🌿 ${BRANCH}\n👤 ${ACTOR}\n🔍 Lint ou format en erreur\n🔗 ${URL}"
+          fi
+
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"content\":\"$MSG\"}" \
+            $DISCORD_WEBHOOK
