@@ -9,6 +9,9 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
 
     steps:
       - name: Send Discord embed
@@ -21,6 +24,10 @@ jobs:
           ACTOR="${{ github.event.workflow_run.actor.login }}"
           URL="${{ github.event.workflow_run.html_url }}"
 
+          # Debugging
+          echo "Conclusion: $CONCLUSION"
+          echo "Webhook URL présent: $([ -n "$DISCORD_WEBHOOK" ] && echo 'oui' || echo 'non')"
+
           if [ "$CONCLUSION" = "success" ]; then
             COLOR=3066993
             TITLE="✅ Code Quality OK"
@@ -31,21 +38,42 @@ jobs:
             DETAILS="Lint ou Format est en erreur."
           fi
 
-          curl -X POST -H "Content-Type: application/json" \
-          -d "{
-            \"embeds\": [{
-              \"title\": \"$TITLE\",
-              \"color\": $COLOR,
-              \"fields\": [
-                { \"name\": \"📦 Repo\", \"value\": \"$REPO\", \"inline\": true },
-                { \"name\": \"🌿 Branche\", \"value\": \"$BRANCH\", \"inline\": true },
-                { \"name\": \"👤 Auteur\", \"value\": \"$ACTOR\", \"inline\": true },
-                { \"name\": \"🔍 Détails\", \"value\": \"$DETAILS\" }
+          # Échapper les caractères JSON correctement
+          PAYLOAD=$(cat <<EOF
+          {
+            "embeds": [{
+              "title": "$TITLE",
+              "color": $COLOR,
+              "fields": [
+                { "name": "📦 Repo", "value": "$REPO", "inline": true },
+                { "name": "🌿 Branche", "value": "$BRANCH", "inline": true },
+                { "name": "👤 Auteur", "value": "$ACTOR", "inline": true },
+                { "name": "🔍 Détails", "value": "$DETAILS" }
               ],
-              \"url\": \"$URL\",
-              \"footer\": {
-                \"text\": \"GitHub Actions • Code Quality\"
-              }
+              "url": "$URL",
+              "footer": {
+                "text": "GitHub Actions • Code Quality"
+              },
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
             }]
-          }" \
-          $DISCORD_WEBHOOK
+          }
+          EOF
+          )
+
+          # Envoyer le webhook avec gestion d'erreur
+          HTTP_RESPONSE=$(curl -X POST \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD" \
+            -w "\n%{http_code}" \
+            -s \
+            "$DISCORD_WEBHOOK")
+
+          HTTP_CODE=$(echo "$HTTP_RESPONSE" | tail -n1)
+
+          if [ "$HTTP_CODE" -ne 204 ]; then
+            echo "Erreur Discord: HTTP $HTTP_CODE"
+            echo "$HTTP_RESPONSE"
+            exit 1
+          else
+            echo "Message Discord envoyé avec succès!"
+          fi
