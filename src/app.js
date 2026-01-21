@@ -1,6 +1,6 @@
 // src/app.js
-const express = require('express');
-const routes = require('./routes/index');
+import express from 'express';
+import routes from './routes/index.js';
 
 const app = express();
 
@@ -8,15 +8,15 @@ const app = express();
 app.use(routes);
 
 // 404
-app.use((req, res, next) => {
-  res.status(404).json({ message: 'Not found' });
+app.use((req, res, _next) => {
+	res.status(404).json({ message: 'Not found' });
 });
 
 // Error handler
-app.use((err, req, res, next) => {
-  console.error(err);
-  const status = err.status || 500;
-  res.status(status).json({ message: err.message || 'Internal server error' });
+app.use((err, req, res, _next) => {
+	console.error(err);
+	const status = err.status || 500;
+	res.status(status).json({ message: err.message || 'Internal server error' });
 });
 
-module.exports = app;
+export default app;

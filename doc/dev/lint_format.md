@@ -19,12 +19,12 @@ setting.json (soit de ton profil node_js, soit dans .vscode/settings.json dans l
 
 ```json
 {
-  "editor.insertSpaces": false,
-  "editor.tabSize": 4,
-  "editor.detectIndentation": false,
-  "editor.formatOnSave": true,
-  "files.insertFinalNewline": true,
-  "files.trimTrailingWhitespace": true
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"editor.detectIndentation": false,
+	"editor.formatOnSave": true,
+	"files.insertFinalNewline": true,
+	"files.trimTrailingWhitespace": true
 }
 ```
 
@@ -54,9 +54,8 @@ npm run fix               # Corrige lint + format
 ```
 
 ## Avant de commit
+
 > [!CAUTION]
 > Lance toujours `npm run check` pour vérifier que ton code respecte les règles du projet.
 >
 > Si des erreurs apparaissent, lance npm run fix pour les corriger automatiquement.
-
-
