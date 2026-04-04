@@ -1,12 +1,19 @@
 import express from 'express';
+import { ProductModel as Type } from '../models/associations.js';
 const router = express.Router();
-import { getAll } from './../controllers/temp.controller.js';
 
 // Define your routes here
+
+//default route
 router.get('/', async (req, res) => {
+	console.log('oscour');
 	res.json({ message: 'Welcome to the API restaurant' });
 });
 
-router.get('/test', getAll);
+router.get('/test', async (req, res) => {
+	const products = await Type.findAll();
+	console.log('products:', products);
+	res.json({ message: products });
+});
 
 export default router;

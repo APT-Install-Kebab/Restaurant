@@ -13,6 +13,7 @@ const sequelize = new Sequelize(configDB.database, configDB.username, configDB.p
 (async () => {
 	try {
 		await sequelize.authenticate();
+		console.log('Connection on database has been established successfully.');
 	} catch (error) {
 		console.error('Unable to connect to the database:', error);
 	}

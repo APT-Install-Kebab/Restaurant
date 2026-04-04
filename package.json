@@ -13,7 +13,8 @@
 		"format:check": "prettier --check .",
 		"format:fix": "prettier --write .",
 		"check": "npm run lint:check && npm run format:check",
-		"fix": "npm run lint:fix && npm run format:fix"
+		"fix": "npm run lint:fix && npm run format:fix",
+		"dev": "nodemon server.js"
 	},
 	"dependencies": {
 		"dotenv": "^17.2.3",
