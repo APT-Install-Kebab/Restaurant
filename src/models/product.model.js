@@ -8,7 +8,6 @@ const ProductModel = sequelize.define(
 			type: DataTypes.STRING(32),
 			allowNull: false,
 			primaryKey: true,
-			autoIncrement: true,
 		},
 		name: {
 			type: DataTypes.STRING(100),

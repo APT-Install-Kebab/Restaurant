@@ -8,11 +8,11 @@ const OrderModel = sequelize.define(
 			type: DataTypes.STRING(32),
 			allowNull: false,
 			primaryKey: true,
-			autoIncrement: true,
 		},
-		createdAt: {
+		created_at: {
 			type: DataTypes.DATE,
 			allowNull: false,
+			defaultValue: DataTypes.NOW,
 		},
 		mail_user: {
 			type: DataTypes.STRING(320),
@@ -24,8 +24,8 @@ const OrderModel = sequelize.define(
 		},
 	},
 	{
-		sequelize,
-		modelName: 'order',
+		tableName: 'order',
+		timestamps: false,
 	}
 );
 
