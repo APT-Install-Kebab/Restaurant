@@ -4,3 +4,4 @@ build
 coverage
 *.log
 .github/workflows/**
+doc/
