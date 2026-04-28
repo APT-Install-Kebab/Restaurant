@@ -38,3 +38,13 @@ project-root/
 # documentation
 
 pour traivailler sur le projet liser se qu'il y a dans `/./doc/dev/`
+
+## Docker
+
+Lancer l'API Express et MariaDB dans deux conteneurs séparés:
+
+```bash
+docker compose up --build
+```
+
+L'API sera disponible sur `http://localhost:3000` et la base de données sera exposée uniquement entre les conteneurs via le service `db`.
