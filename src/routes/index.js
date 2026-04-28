@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 	res.json({ message: 'Welcome to the API restaurant' });
 });
 
-router.use('/types', typeRouter);
+router.use("/types", typeRouter);
 router.use('/statuses', statusRouter);
 router.use('/products', productRouter);
 router.use('/orders', orderRouter);
