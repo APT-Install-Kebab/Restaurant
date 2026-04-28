@@ -19,7 +19,6 @@
 	"dependencies": {
 		"dotenv": "^17.2.3",
 		"express": "^5.2.1",
-		"http": "^0.0.1-security",
 		"mariadb": "^3.4.5",
 		"sequelize": "^6.37.7"
 	},
